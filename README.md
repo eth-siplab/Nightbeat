@@ -1,1 +1,2 @@
 # Nightbeat
+The repository accompanying our publication **Heart Rate Estimation From a Wrist-Worn Accelerometer During Sleep**. The repository will be updated upon publication, containing our accompanying dataset Nightbeat-DB and all code to replicate the results presented in our paper. We will further dive into details of our experiment design that didn't make the final 8-page version of our manuscript but might be useful for other researchers working with similar setups.
