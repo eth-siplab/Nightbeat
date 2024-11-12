@@ -10,7 +10,7 @@
 **Nightbeat-DB:** a novel dataset to enable heart rate monitoring during sleep from wrist-worn accelerometers in *uncontrolled, at-home* settings.
 **Nightbeat:** a novel algorithm that is based on simple signal aggregation and combines effective motion artifact removal, curve tracing of heart rate values in the frequency domain, and simple post processing to push the error of heart rate estimation from wrist-worn accelerometers during sleep below 1 bpm MAE.
 
-![overview](./figures/overview.png)
+![overview](./figures/overview_small.png)
 
 # Results
 
@@ -31,11 +31,11 @@ Comparison of Nightbeat against three baseline approaches on Nightbeat-DB and th
 
 Across all participants, the correlation of Nightbeat exceeds 0.91.
 
-<img src="./figures/all_participants.png" alt="all participants" width="50%">
+<img src="./figures/all_participants_small.png" alt="all participants" width="50%">
 
 For a single participant, the correlation approaches 1 with an MAE as low as 0.41 across the entire night.
 
-<img src="./figures/single_participant.png" alt="single participant" width="50%">
+<img src="./figures/single_participant_small.png" alt="single participant" width="50%">
 
 # Codebase and Data
 
