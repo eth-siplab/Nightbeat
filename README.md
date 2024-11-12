@@ -29,7 +29,7 @@ Comparison of Nightbeat against three baseline approaches on Nightbeat-DB and th
 | **Nightbeat (ours)** | **Nightbeat-DB** | **0.88** | **2.24** | **0.81** |
 |                   | **AW**       | **1.68** | **3.38** | **0.64** |
 
-Across all participants, the correlation of Nightbeat exceeds 0.91.
+Across all participants, the correlation of Nightbeat exceeds 0.95.
 
 <img src="./figures/all_participants_small.png" alt="all participants" width="50%">
 
