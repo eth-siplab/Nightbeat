@@ -7,8 +7,8 @@
 >Today’s fitness bands and smartwatches typically track heart rates (HR) using optical sensors. Large behavioral studies such as the UK Biobank use activity trackers without such optical sensors and thus lack HR data, which could reveal valuable health trends for the wider population. In this paper, we present the first dataset of wrist-worn accelerometer recordings and electrocardiogram references in uncontrolled at-home settings to investigate the recent promise of IMU-only HR estimation via ballistocardiograms. Our recordings are from 42 patients during the night, totaling 310 hours. We also introduce a frequency-based method to extract HR via curve tracing from IMU recordings while rejecting motion artifacts. Using our dataset, we analyze existing baselines and show that our method achieves a mean absolute error of 0.88 bpm—76% better than previous approaches. Our results validate the potential of IMUonly HR estimation as a key indicator of cardiac activity in existing longitudinal studies to discover novel health insights.
 
 # Overview
-**Nightbeat-DB:** a novel dataset to enable heart rate monitoring during sleep from wrist-worn accelerometers in *uncontrolled, at-home* settings.
-**Nightbeat:** a novel algorithm that is based on simple signal aggregation and combines effective motion artifact removal, curve tracing of heart rate values in the frequency domain, and simple post processing to push the error of heart rate estimation from wrist-worn accelerometers during sleep below 1 bpm MAE.
+**Nightbeat-DB:** a novel dataset to enable heart rate monitoring during sleep from wrist-worn accelerometers in *uncontrolled, at-home* settings.<br/>
+**Nightbeat:** a novel algorithm that is based on robust signal aggregation and combines effective motion artifact removal, curve tracing of the heart rate in the frequency domain, and simple post processing to push the average error of heart rate estimation from wrist-worn accelerometers during sleep below 1 bpm MAE.
 
 ![overview](./figures/overview_small.png)
 
