@@ -76,7 +76,9 @@ conda activate nightbeat
 ```
 
 If you have issues installing PyTorch, create a conda environment with Python=3.12, install whatever version of torch works for you and then install the other packages. The correct SciPy version is crucial for the repository to work. The correct Polars version is helpful to keep file sizes small using the Float16 datatype (which is not implemented in older versions). However, the repository does not break if the Polars version is not correct.
-Alternatively, you can also set up a virtual (venv) environment with Python version 3.12.. Simply take the required versions out of the environment.yml file and install the packages via pip.
+
+**Option A: venv**
+Alternatively, you can also set up a virtual (venv) environment with Python version 3.12. Simply take the required versions out of the environment.yml file and install the packages via pip.
 
 ### 2. Data Preparation
 
