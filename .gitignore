@@ -1,0 +1,11 @@
+*.parquet
+*.txt
+*.pyc
+*.npy
+*.npz
+!*00*.npz
+*.html
+*.zip
+*.png
+*.csv
+!figures/*

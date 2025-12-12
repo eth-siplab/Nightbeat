@@ -1,6 +1,6 @@
-## Nightbeat: Heart Rate Estimation From a Wrist-Worn Accelerometer During Sleep
+# Nightbeat: Heart Rate Estimation From a Wrist-Worn Accelerometer During Sleep
 
-[Max Moebus<sup>1</sup>](https://maxmoebus.com/), Lars Hauptmann<sup>1</sup>, Nicolas Kopp<sup>1</sup>, Berken Demirel<sup>1</sup>, Björn Braun<sup>1</sup>, [Christian Holz<sup>1</sup>](https://www.christianholz.net)
+[Max Moebus<sup>1</sup>](https://maxmoebus.com/), Lars Hauptmann<sup>1</sup>, Nicolas Kopp<sup>1</sup>, [Berken Demirel](https://berken-demirel.github.io/)<sup>1</sup>, [Björn Braun](https://bjoernbraun.com/)<sup>1</sup>, [Christian Holz<sup>1</sup>](https://www.christianholz.net)
 
 <sup>1</sup> [Sensing, Interaction & Perception Lab](https://siplab.org), Department of Computer Science, ETH Zürich, Switzerland <br/>
 
@@ -37,15 +37,118 @@ For a single participant, the correlation approaches 1 with an MAE as low as 0.4
 
 <img src="./figures/single_participant_small.png" alt="single participant" width="50%">
 
-# Codebase and Data
+# NightbeatDB
 
-We will upload the data and code very soon.
+For scientific use, we make the data of 40 participants of NightbeatDB publicly available. The study protocol was approved by the ethics committee of ETH Zurich (23 ETHICS-002). All participants provided written informed consent and 40 out of 42 participants provided consent for the publication of their anonymized data for scientific, non-commercial purposes only.
+
+The anonymized data can be downloaded [here](https://polybox.ethz.ch/index.php/s/oszYjY5aZ2xwMZp) or also [here](https://polybox.ethz.ch/index.php/s/oszYjY5aZ2xwMZp). Please read below for instructions on how to incorporate NightbeatDB into the Nightbeat repository.
+
+# Codebase and Usage
+
+This repository contains the official implementation of **Nightbeat**, and implementations of benchmarking algorithms.
+
+## 📂 Repository Structure
+
+*   **`BCGAlgorithms/`**: Core implementations of the signal processing algorithms.
+    *   `nightbeat.py`: The proposed method using adaptive bandpass and curve tracing.
+    *   `pwr.py`: Pulse Wave Reconstruction (axis selection + Hilbert envelope).
+    *   `jerks.py`: Jerk-based estimation.
+    *   `bioinsights.py`: Baseline bandpass filtering method.
+*   **`helpers/`**: Utilities for data loading, cleaning, and preprocessing.
+*   **`transform.py`**: Feature extraction pipeline (converts raw acceleration to spectrograms/features).
+*   **`predict.py`**: Estimating Heart Rate from the transformed features.
+*   **`align.py`**: Helper script to download and align public datasets.
+*   **`evaluate.py`**: Metrics (MAE, RMSE, Correlation) and visualization tools.
+*   **`runner.sh`**: Prepares the two datasets, and executes all algorithms on both datasets.
+*   **`visualize_results.ipynb`**: Compute performance metrics and create visualizations.
+
+## 🚀 Getting Started
+
+### 1. Installation
+
+This repository relies on specific versions of SciPy (for `ShortTimeFFT`) and Polars. We recommend using Conda.
+
+**Option A: Conda (Recommended)**
+Run:
+```bash
+conda env create -f environment.yml
+conda activate nightbeat
+```
+
+If you have issues installing PyTorch, create a conda environment with Python=3.12, install whatever version of torch works for you and then install the other packages. The correct SciPy version is crucial for the repository to work. The correct Polars version is helpful to keep file sizes small using the Float16 datatype (which is not implemented in older versions). However, the repository does not break if the Polars version is not correct.
+Alternatively, you can also set up a virtual (venv) environment with Python version 3.12.. Simply take the required versions out of the environment.yml file and install the packages via pip.
+
+### 2. Data Preparation
+
+This repository supports two datasets:
+1.  **AW (Apple Watch):** A public dataset from *Walch et al. (2019)* [1].
+2.  **NightbeatDB:** (Internal/Private dataset).
+
+First, download **NightbeatDB** from [here](https://polybox.ethz.ch/index.php/s/oszYjY5aZ2xwMZp) (~4GB in zipper format) and place all files into `data/raw/nighbeatdb` (e.g., `data/raw/nighbeatdb/00_acc-a.npz`). Then to prepare **NightbeatDB**, and download (~5GB) and prepare the **AW** dataset, run:
+
+```bash
+python align.py
+```
+*This will download data from PhysioNet to `data/raw/aw`, and process it into `data/aligned/aw`. And process NightbeatDB into `data/aligned/nightbeatdb`*
+
+## ⚡ Usage Pipeline
+
+The pipeline consists of two stages: **Transformation** (signal processing) and **Prediction** (HR estimation).
+
+### Step 1: Transformation
+Prepares the data into the format needed for the respective algorithms. This step is computationally expensive but results are saved as `.parquet` files and only need to be computed once per algorithm.
+
+**Available Algorithms:** `nightbeat`, `pwr`, `jerks`, `bioinsights`.
+
+```bash
+# Run a specific algorithm with 4 parallel workers
+python transform.py --algorithm nightbeat --datasets aw --workers 4
+
+# Run all algorithms
+python transform.py --algorithm all --datasets nightbeatdb --workers 4
+```
+
+### Step 2: Prediction
+Estimates the heart rate from the transformed data.
+
+```bash
+# Predict using Nightbeat with a 20-second window
+python predict.py --algorithm nightbeat --datasets aw --workers 4
+
+# Predict using all implemented algorithms
+python predict.py --algorithm all --datasets aw
+```
+
+### Step 3: Evaluation & Visualization
+You can analyze results using the provided notebook or scripts.
+
+```bash
+# Start Jupyter to view compute and visualize results
+jupyter notebook visualize_results.ipynb
+```
+
+### Full run
+
+If you've set up the environment, you can also simply run
+
+```bash
+bash runner.sh
+```
+
+to execute all algorithms on both the **aw** dataset and **NightbeatDB** (including download and data preparation). Note that the created files will take up quite a bit of disk space. With the correct polars version, the nightbeat algorithm will create files that take up ~10GB of disk space for NightbeatDB and ~4GB of disk space for the aw dataset. With earlier polars versions, this will double. Using this current implementation the file created when executing the other algorithms will take up similar amounts of disk space, so things can add up.
+
+## ⚙️ Configuration
+
+*   **GPU Acceleration:** If you have a GPU (specifically for PWR), you can edit the `possible_gpus` list in `transform.py` to enable CUDA acceleration.
+*   **Threading:** The scripts automatically handle thread management (`POLARS_MAX_THREADS=1`) to prevent CPU oversubscription when using multiprocessing.
 
 # Follow-up(s)
 
 Stay tuned for follow-up projects that evaluate the value of Nightbeat for disease prediction and advance what we can extract from wrist-worn accelerometers.
 
 # Citation
+
+If you use this code in your research, please cite:
 
 ```bibtex
 @INPROCEEDINGS{moebus2024nightbeat,

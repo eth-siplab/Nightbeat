@@ -1,0 +1,19 @@
+name: nightbeat
+channels:
+  - pytorch
+  - conda-forge
+  - defaults
+  - https://repo.anaconda.com/pkgs/main
+  - https://repo.anaconda.com/pkgs/r
+dependencies:
+  - jupyter
+  - matplotlib
+  - numpy
+  - python=3.12
+  - polars=1.36.1
+  - scipy=1.16.2
+  - pip=25.2
+  - pip:
+      - argparse
+      - torch==2.9.0
+      - torchvision==0.24.0

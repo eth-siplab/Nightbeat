@@ -1,0 +1,1 @@
+After unzipping, place all raw files of NighbeatDB into here.
